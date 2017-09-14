@@ -13,6 +13,7 @@ var getHtmlConfig = function(name, title){
     return {
         template    : './src/view/' + name + '.html',//模板
         filename    : 'view/' + name + '.html',//打包的名字
+        favicon     : './favicon.ico',
         title       : title,  //htmltitle
         inject      : true,
         hash        : true,
@@ -41,9 +42,9 @@ var config = {
         'about'             : ['./src/page/about/index.js'],
     },
     output: {
-        path: './dist',
-        publicPath : '/dist',//访问文件的地址（打包后的）
-        filename: 'js/[name].js'
+        path        : __dirname+'/dist',
+        publicPath  : 'dev' === WEBPACK_ENV ? '/dist/':'//s.hpengsmile.cc/mmall-fe/dist/',//访问文件的地址（打包后的）
+        filename    : 'js/[name].js'
     },
     externals : {
         'jquery' : 'window.jQuery' //加载jquery
@@ -52,7 +53,13 @@ var config = {
         loaders: [//检测以css结尾的文件,加载loader,这里两个，从右到左
             { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader","css-loader") },
             { test: /\.(gif|png|jpg|woff|svg|eot|ttf)\??.*$/, loader: 'url-loader?limit=100&name=resource/[name].[ext]' },//图片加载
-            { test: /\.string$/, loader: 'html-loader'}//对html模板的加载
+            {
+                 test: /\.string$/,
+                 loader: 'html-loader',
+                 query :{
+                     minimize:true,
+                     removeAttributeQuotes : false
+                 }}//对html模板的加载
         ]
     },//别名
     resolve : {
